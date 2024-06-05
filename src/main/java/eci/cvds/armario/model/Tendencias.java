@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-
 @Entity
 @Getter
 @Setter
@@ -21,19 +20,24 @@ public class Tendencias {
     @GenericGenerator(name="uuid2", strategy = "uuid2")
     private String idTendencia;
 
-    @Column(name = "prendaConjunto")
+    @ManyToOne
+    @JoinColumn(name = "prendaConjunto")
     private Prenda prendaPrincipal;
 
-    @Column(name = "prenda1")
+    @ManyToOne
+    @JoinColumn(name = "prenda1")
     private Prenda prenda1;
 
-    @Column(name = "prenda2")
+    @ManyToOne
+    @JoinColumn(name = "prenda2")
     private Prenda prenda2;
 
-    @Column(name = "prenda3")
+    @ManyToOne
+    @JoinColumn(name = "prenda3")
     private Prenda prenda3;
 
-    @Column(name = "prenda4")
+    @ManyToOne
+    @JoinColumn(name = "prenda4")
     private Prenda prenda4;
 
 }

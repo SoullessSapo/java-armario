@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public interface TendenciasRepository extends JpaRepository<Tendencias, UUID>{
     List<Tendencias> findAll();
-    Tendencias findByPrenda(Prenda prenda);
 
 
 }

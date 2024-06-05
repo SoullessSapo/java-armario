@@ -14,6 +14,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Embeddable
 @Table(name = "prendas")
 public class Prenda {
     @Id
