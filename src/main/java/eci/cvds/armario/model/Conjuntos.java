@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+
 import java.util.UUID;
 
 @Entity
@@ -17,6 +19,7 @@ public class Conjuntos {
     @Id
     @Column(name = "conjunto_id")
     @GeneratedValue(strategy = GenerationType.UUID)
+
     private UUID conjuntoId;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import java.util.UUID;
 
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "prendas")
-public class Prenda {
+@Table(name = "prenda")
+public class Prenda implements java.io.Serializable {
     @Id
     @Column(name = "prenda_id")
     @GeneratedValue(generator = "uuid2")
@@ -32,5 +33,6 @@ public class Prenda {
 
     @Column(name = "image_url_base_64", columnDefinition = "LONGTEXT")
     private String imageUrlBase64;
+
 
 }
