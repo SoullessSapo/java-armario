@@ -29,5 +29,5 @@ public class Model {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "model_category")
-    private CategoriaPrenda modeCategory;
+    private CategoriaPrenda modelCategory;
 }

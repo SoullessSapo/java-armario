@@ -23,7 +23,10 @@ public class ModelController {
         this.modelRepository = modelRepository;
         this.sessionRepository = sessionRepository;
     }
-
+    @GetMapping("/models")
+    public ResponseEntity<?> getAllModels() {
+        return new ResponseEntity<>(modelRepository.findAll(), HttpStatus.OK);
+    }
     @GetMapping("")
     public ResponseEntity<Model> getModelByModelId(@PathVariable("idModel") UUID idModel) {
         Model model = modelRepository.getModelByModelId(idModel);
@@ -46,8 +49,12 @@ public class ModelController {
     @PostMapping("")
     public ResponseEntity<?> addModel(@RequestHeader("authToken") UUID token, @RequestBody Model model) {
         User user = this.sessionRepository.findByToken(token).getUser();
-        if (user == null) {
+        if (user == null ) {
             return new ResponseEntity<>("admin not found", HttpStatus.FORBIDDEN);
+        }
+        System.out.println(user.getRole().name());
+       if (!user.getRole().name().equals("ADMINISTRADOR")) {
+            return new ResponseEntity<>("user is not admin", HttpStatus.FORBIDDEN);
         }
         Model savedModel = modelRepository.save(model);
         return new ResponseEntity<>(savedModel, HttpStatus.OK);

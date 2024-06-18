@@ -2,7 +2,7 @@ package eci.cvds.armario.model;
 
 public enum CategoriaPrenda {
     Formal,
-    Semifomral,
+    SemiFormal,
     Casual,
     Deportivo
 }

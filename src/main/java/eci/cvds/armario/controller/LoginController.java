@@ -1,5 +1,6 @@
 package eci.cvds.armario.controller;
 
+import eci.cvds.armario.model.Roles;
 import eci.cvds.armario.model.Session;
 import eci.cvds.armario.model.User;
 import eci.cvds.armario.repository.SessionRepository;
@@ -54,12 +55,18 @@ public class LoginController {
         }
     }
 
-    @PostMapping("register")
+    @PostMapping("client/register")
     public ResponseEntity<String> registerSubmit(@RequestBody User userSend) {
+        userSend.setRole(Roles.CLIENTE); // Set the role to CLIENT
         userService.adicionar(userSend);
         return new ResponseEntity<>("Usuario registrado correctamente \n", HttpStatus.OK);
     }
-
+    @PostMapping("admin/register")
+    public ResponseEntity<String> registerAdminSubmit(@RequestBody User userSend) {
+        userSend.setRole(Roles.ADMINISTRADOR); // Set the role to ADMIN
+        userService.adicionar(userSend);
+        return new ResponseEntity<>("Usuario registrado correctamente \n", HttpStatus.OK);
+    }
     @DeleteMapping("/eliminarSesiones")
     public void eliminarSesiones(){
         sessionRepository.deleteAll();

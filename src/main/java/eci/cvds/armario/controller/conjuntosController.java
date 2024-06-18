@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,22 +20,32 @@ import java.util.UUID;
 @CrossOrigin(origins = {"http://localhost:3000", "https://armariolocochonback.azurewebsites.net/"})
 @RequestMapping(value = "/user")
 public class conjuntosController {
-    private PrendaRepository prendaRepository;
+
     private ConjuntosRepository conjuntosRepository;
     private SessionRepository sessionRepository;
 
     @Autowired
-    public conjuntosController(PrendaRepository prendaRepository, SessionRepository sessionRepository, ConjuntosRepository conjuntosRepository) {
-        this.prendaRepository = prendaRepository;
+    public conjuntosController( SessionRepository sessionRepository, ConjuntosRepository conjuntosRepository) {
+
         this.sessionRepository = sessionRepository;
         this.conjuntosRepository = conjuntosRepository;
     }
 
     @GetMapping("/client/conjuntos")
-    public List<Conjuntos> getAllConjuntosOfUser(@RequestHeader("authToken") UUID authToken) {
-        User user = this.sessionRepository.findByToken(authToken).getUser();
-        return conjuntosRepository.findByUser(user);
+public List<List<Prenda>> getAllConjuntosOfUser(@RequestHeader("authToken") UUID authToken) {
+    User user = this.sessionRepository.findByToken(authToken).getUser();
+    List<Conjuntos> conjuntos = conjuntosRepository.findByUser(user);
+    List<List<Prenda>> prendasPorConjunto = new ArrayList<>();
+    for (Conjuntos conjunto : conjuntos) {
+        List<Prenda> prendas = new ArrayList<>();
+        if (conjunto.getPrenda1() != null) prendas.add(conjunto.getPrenda1());
+        if (conjunto.getPrenda2() != null) prendas.add(conjunto.getPrenda2());
+        if (conjunto.getPrenda3() != null) prendas.add(conjunto.getPrenda3());
+        if (conjunto.getPrenda4() != null) prendas.add(conjunto.getPrenda4());
+        prendasPorConjunto.add(prendas);
     }
+    return prendasPorConjunto;
+}
 
     @GetMapping("/client/conjunto/{idConjunto}")
     public ResponseEntity<Conjuntos> getConjuntoById(@RequestHeader("authToken") UUID authToken, @PathVariable("idConjunto") UUID idConjunto) {
@@ -47,26 +58,11 @@ public class conjuntosController {
         }
     }
 
-    @PostMapping("/client/conjunto")
-    public Conjuntos addConjunto(@RequestBody List<Prenda> prendas, @RequestHeader("authToken") UUID authToken) {
-        User user = this.sessionRepository.findByToken(authToken).getUser();
-        Conjuntos conjunto = new Conjuntos();
-        conjunto.setUser(user);
-        int size = prendas.size();
-        if (size >= 1) {
-            conjunto.setPrenda1(prendaRepository.save(prendas.get(0)));
-        }
-        if (size >= 2) {
-            conjunto.setPrenda2(prendaRepository.save(prendas.get(1)));
-        }
-        if (size >= 3) {
-            conjunto.setPrenda3(prendaRepository.save(prendas.get(2)));
-        }
-        if (size >= 4) {
-            conjunto.setPrenda4(prendaRepository.save(prendas.get(3)));
-        }
-        return conjuntosRepository.save(conjunto);
-    }
 
-
+   @PostMapping("/client/conjunto")
+public Conjuntos addConjunto(@RequestBody Conjuntos conjunto, @RequestHeader("authToken") UUID authToken) {
+    User user = this.sessionRepository.findByToken(authToken).getUser();
+    conjunto.setUser(user);
+    return conjuntosRepository.save(conjunto);
+}
 }

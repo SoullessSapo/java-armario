@@ -30,6 +30,10 @@ public class User {
     @Column(name = "Password")
     private String password;
 
+    @Column(name = "Email")
+    private String email;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "Role")
     private Roles role;
 
