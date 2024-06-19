@@ -1,10 +1,12 @@
 package eci.cvds.armario.controller;
 
+import eci.cvds.armario.model.Roles;
 import eci.cvds.armario.model.User;
 import eci.cvds.armario.repository.SessionRepository;
 import eci.cvds.armario.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import eci.cvds.armario.model.Roles;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,10 +33,13 @@ public class UsersController {
     }
 
     @GetMapping("/admin/users")
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<User>> getUsers(@RequestHeader("authToken") UUID authToken) {
+        User user = this.sessionRepository.findByToken(authToken).getUser();
+        if (user.getRole() != Roles.ADMINISTRADOR) {
+            throw new RuntimeException("Unauthorized access. User is not an administrator.");
+        }
         return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
     }
-
     @GetMapping("/admin/username/{id}")
     public User getUserByUsername(@PathVariable("id") String id) {
         try{
@@ -44,20 +49,17 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/client/userId")
+    @GetMapping("/userId")
     public User getUserByID(@RequestHeader("authToken") UUID id) {
         return this.sessionRepository.getReferenceById(id).getUser();
     }
 
-    @GetMapping("/client/token")
+    @GetMapping("/token")
     public User getUserByToken(@RequestHeader("authToken") UUID authToken) {
         return this.sessionRepository.findByToken(authToken).getUser();
     }
 
-    @GetMapping("/admin/token")
-    public User getUserByTokenAdmin(@RequestHeader("authToken") UUID authToken) {
-        return this.sessionRepository.findByToken(authToken).getUser();
-    }
+
 
     @PostMapping("/admin/adicionarUsuario")
     public void adicionar(@RequestBody User user) {

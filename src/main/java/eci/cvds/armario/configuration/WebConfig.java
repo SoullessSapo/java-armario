@@ -21,6 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(basicAuthInterceptor)
                 .addPathPatterns("/user/**")
                 .excludePathPatterns("/user/prendas")
+                .excludePathPatterns("/user/token")
                 .addPathPatterns("/login/eliminarSesiones");
     }
 
