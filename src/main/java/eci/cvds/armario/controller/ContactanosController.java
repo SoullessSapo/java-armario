@@ -10,7 +10,7 @@ public class ContactanosController {
 
     private final JavaMailSender emailSender;
 
-    public EmailController(JavaMailSender emailSender) {
+    public ContactanosController(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 
