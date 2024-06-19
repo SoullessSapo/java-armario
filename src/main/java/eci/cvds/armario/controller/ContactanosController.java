@@ -17,7 +17,7 @@ public class ContactanosController {
     @PostMapping("/sendEmail")
     public void sendEmail(@RequestBody String recipientEmail) {
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("my.gmail@gmail.com");
+        message.setFrom("sapins601@gmail.com");
         message.setTo(recipientEmail);
         message.setSubject("Correo personalizado");
         message.setText("Este es el cuerpo del correo personalizado.");
